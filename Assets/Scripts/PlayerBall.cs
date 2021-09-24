@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerBall : MonoBehaviour
 {
     public float jumpPower;
     public int itemCount;
+    public GameManagerLogic manager;
 
     bool isJumping;
     Rigidbody rigid;
@@ -38,7 +40,7 @@ public class PlayerBall : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.name == "Floor")
+        if (collision.gameObject.tag == "Floor")
         {
             isJumping = false;
         }
@@ -46,12 +48,25 @@ public class PlayerBall : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.name == "Item")
+        if (other.tag == "Item")
         {
             itemCount++;
             audio.Play();
 
             other.gameObject.SetActive(false);
+        }
+        else if (other.tag == "Finish")
+        {
+            if(itemCount == manager.TotalItemCount)
+            {
+                // Game Clear
+                SceneManager.LoadScene(manager.stage + 1);
+            }
+            else
+            {
+                // Restart
+                SceneManager.LoadScene(manager.stage);
+            }
         }
     }
 }
