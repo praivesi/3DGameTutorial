@@ -52,6 +52,7 @@ public class PlayerBall : MonoBehaviour
         {
             itemCount++;
             audio.Play();
+            manager.GetItem(itemCount);
 
             other.gameObject.SetActive(false);
         }
